@@ -1,0 +1,170 @@
+@import "tailwindcss";
+
+/*
+  Design tokens.
+  Two material worlds share the site: leather (warm, dark) and
+  detailing (cool, bright). The stitched seam joins them.
+*/
+@theme {
+  --color-espresso: #2a1b17;
+  --color-espresso-deep: #1e1310;
+  --color-hide: #38241e;
+  --color-saddle: #c9813f;
+  --color-saddle-deep: #8a4b1e;
+  --color-thread: #efe6d5;
+  --color-thread-dim: #c9bba6;
+  --color-rinse: #dde7ea;
+  --color-rinse-bright: #eef4f5;
+  --color-water: #1b3640;
+  --color-water-soft: #44606a;
+
+  --font-display: "Teko", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --font-sans: "Archivo Variable", "Archivo", system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-espresso);
+  color: var(--color-thread);
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-saddle);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.on-rinse :focus-visible {
+  outline-color: var(--color-water);
+}
+
+/* Teko sits high in its box, so headings get tight leading and a nudge. */
+@utility display {
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: 0.92;
+  letter-spacing: 0.005em;
+  text-wrap: balance;
+}
+
+/* Leather: dark panel with a faint grain. */
+@utility leather {
+  background-color: var(--color-espresso);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 0.9  0 0 0 0 0.8  0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23g)'/%3E%3C/svg%3E");
+  color: var(--color-thread);
+}
+
+/* Detailing: cool, clean panel. */
+@utility rinse {
+  background-color: var(--color-rinse);
+  color: var(--color-water);
+}
+
+/*
+  The seam. A row of stitches drawn in the current text color.
+  Two rows side by side read as a French seam.
+*/
+@utility stitch-x {
+  height: 2px;
+  background-image: repeating-linear-gradient(
+    90deg,
+    currentColor 0 11px,
+    transparent 11px 17px
+  );
+  border-radius: 1px;
+}
+
+@utility stitch-y {
+  width: 2px;
+  background-image: repeating-linear-gradient(
+    180deg,
+    currentColor 0 11px,
+    transparent 11px 17px
+  );
+  border-radius: 1px;
+}
+
+/* Buttons */
+@utility btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 3rem;
+  padding: 0.7rem 1.4rem;
+  border-radius: 4px;
+  font-weight: 650;
+  font-size: 1rem;
+  line-height: 1.2;
+  text-decoration: none;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease,
+    border-color 120ms ease;
+}
+
+@utility btn-saddle {
+  background: var(--color-saddle);
+  color: var(--color-espresso-deep);
+  &:hover {
+    background: #d99352;
+  }
+}
+
+@utility btn-thread {
+  border: 1.5px solid var(--color-thread-dim);
+  color: var(--color-thread);
+  &:hover {
+    border-color: var(--color-thread);
+    background: rgb(239 230 213 / 0.08);
+  }
+}
+
+@utility btn-water {
+  background: var(--color-water);
+  color: var(--color-rinse-bright);
+  &:hover {
+    background: #244956;
+  }
+}
+
+@utility btn-water-outline {
+  border: 1.5px solid var(--color-water);
+  color: var(--color-water);
+  &:hover {
+    background: rgb(27 54 64 / 0.08);
+  }
+}
+
+/* The one on-load moment: the hero seam sews itself in. */
+@keyframes sew {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.sew-in {
+  animation: sew 1.4s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .sew-in {
+    animation: none;
+  }
+  * {
+    transition-duration: 0.01ms !important;
+  }
+}
